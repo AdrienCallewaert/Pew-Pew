@@ -58,8 +58,52 @@ const player = new Player(x, y, 30, '#138D75')
 
 player.draw()
 
+
+
+const projectiles = []
+
+
+// animation projectile
+function animate(){
+	requestAnimationFrame(animate)
+	projectiles.forEach((projectile) =>
+		{
+		projectile.update()
+	})
+}
+
+
+// event de creation de projectile
+addEventListener('click',(event) =>{
+	
+	projectiles.push(
+		new Projectile(
+			canvas.width / 2, 
+			canvas.height / 2,
+			5,
+			'#0D4E41',
+			{x: 1, y:1}
+		))
+})
+
+animate()
+
+console.log(player)
+
+
+
+
+
+
+
+
+
+
+
+
+
 //	creation de projectile
-	const projectile = new Projectile(
+const projectile = new Projectile(
 	canvas.width / 2, 
 	canvas.height / 2, 
 	5, 
@@ -80,26 +124,3 @@ const projectile2 = new Projectile(
 	y: -1	
 	}
 )
-
-const projectiles = [projectile,projectile2]
-
-
-// animation projectile
-function animate(){
-	requestAnimationFrame(animate)
-	projectiles.forEach((projectile) =>
-		{
-		projectile.update()
-	})
-}
-
-
-// event de creation de projectile
-addEventListener('click',(event) =>{
-
-
-})
-
-animate()
-
-console.log(player)
