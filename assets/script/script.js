@@ -75,7 +75,9 @@ function animate(){
 
 // event de creation de projectile
 addEventListener('click',(event) =>{
+	const angle = Math.atan2(event.clientY - canvas.height /2, event.clientX - canvas.width /2 )
 	
+	console.log(angle);
 	projectiles.push(
 		new Projectile(
 			canvas.width / 2, 
