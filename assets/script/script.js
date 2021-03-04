@@ -110,6 +110,10 @@ function animate(){
 		{
 		projectile.update()
 	})
+
+	enemies.forEach(enemy => {
+		enemy.update()
+	});
 }
 
 
