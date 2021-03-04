@@ -66,6 +66,7 @@ const projectiles = []
 // animation projectile
 function animate(){
 	requestAnimationFrame(animate)
+	c.clearRect(0, 0, canvas.width,canvas.width)
 	projectiles.forEach((projectile) =>
 		{
 		projectile.update()
