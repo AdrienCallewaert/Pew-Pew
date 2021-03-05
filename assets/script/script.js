@@ -7,25 +7,25 @@ canvas.height = innerHeight
 
 
 // le joueur
-class Player{
-	constructor(x, y, radius, color){
+class Player {
+	constructor(x, y, radius, color) {
 		this.x = x
 		this.y = y
 		this.radius = radius
 		this.color = color
 	}
-// construction du joueur	
-	draw(){
+	// construction du joueur	
+	draw() {
 		c.beginPath()
-		c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false)
+		c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
 		c.fillStyle = this.color
 		c.fill()
 	}
 }
 
 // construction des projectiles
-class Projectile{
-	constructor(x, y, radius, color, velocity){
+class Projectile {
+	constructor(x, y, radius, color, velocity) {
 		this.x = x
 		this.y = y
 		this.radius = radius
@@ -33,14 +33,14 @@ class Projectile{
 		this.velocity = velocity
 	}
 	// construction projectiles sur base du joueur
-	draw(){
+	draw() {
 		c.beginPath()
-		c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false)
+		c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
 		c.fillStyle = this.color
 		c.fill()
 	}
 
-	update(){
+	update() {
 		this.draw()
 		this.x = this.x + this.velocity.x
 		this.y = this.y + this.velocity.y
@@ -48,8 +48,8 @@ class Projectile{
 }
 
 // construction des enemy
-class Enemy{
-	constructor(x, y, radius, color, velocity){
+class Enemy {
+	constructor(x, y, radius, color, velocity) {
 		this.x = x
 		this.y = y
 		this.radius = radius
@@ -57,14 +57,14 @@ class Enemy{
 		this.velocity = velocity
 	}
 	// construction projectiles sur base du joueur
-	draw(){
+	draw() {
 		c.beginPath()
-		c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false)
+		c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
 		c.fillStyle = this.color
 		c.fill()
 	}
 
-	update(){
+	update() {
 		this.draw()
 		this.x = this.x + this.velocity.x
 		this.y = this.y + this.velocity.y
@@ -84,65 +84,75 @@ const projectiles = []
 const enemies = []
 
 // animation des enemies
-function spawnEnemies(){
-	setInterval(()=>{
-		const radius = 40
+function spawnEnemies() {
+	//setInterval(()=>{
+	const radius = 40
 
-		let x
-		let y
-		
-		if (Math.random() < 0.5) {
+	let x
+	let y
+
+	if (Math.random() < 0.5) {
 		x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius
 		y = Math.random() * canvas.height
 		// y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius
-		} else {
-			// x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius
-			x = Math.random() * canvas.width
-			y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius
-		}
+	} else {
+		// x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius
+		x = Math.random() * canvas.width
+		y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius
+	}
 
 
-		const color = '#FF5733'
-		const angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x )
-	
-		const velocity = {
-			x: Math.cos(angle),
-			y: Math.sin(angle)
-		}
-		enemies.push(new Enemy(x, y, radius, color, velocity))
-		console.log(enemies)
-	}, 1000)
+	const color = '#FF5733'
+	const angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x)
+
+	const velocity = {
+		x: Math.cos(angle),
+		y: Math.sin(angle)
+	}
+	enemies.push(new Enemy(x, y, radius, color, velocity))
+	console.log(enemies)
+	//}, 1000)
 }
 
 // animation projectile
-function animate(){
+function animate() {
 	requestAnimationFrame(animate)
 	// couverture
-	c.clearRect(0, 0, canvas.width,canvas.width)
-	// jouer top
+	c.clearRect(0, 0, canvas.width, canvas.width)
+	// joueur top
 	player.draw()
-	projectiles.forEach((projectile) =>
-		{
+	projectiles.forEach((projectile) => {
 		projectile.update()
 	})
 
+
+
 	enemies.forEach(enemy => {
+
 		enemy.update()
-	});
+		// deled enemies
+		projectiles.forEach(projectile => {
+			const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
+		
+			if (dist - enemy.radius - projectile.radius < 1) {
+				console.log('remove from screen')
+			}
+		})
+	})
 }
 
 
 // event de creation de projectile
-addEventListener('click',(event) =>{
-	const angle = Math.atan2(event.clientY - canvas.height /2, event.clientX - canvas.width /2 )
-	
+addEventListener('click', (event) => {
+	const angle = Math.atan2(event.clientY - canvas.height / 2, event.clientX - canvas.width / 2)
+
 	const velocity = {
 		x: Math.cos(angle),
 		y: Math.sin(angle)
 	}
 	projectiles.push(
 		new Projectile(
-			canvas.width / 2, 
+			canvas.width / 2,
 			canvas.height / 2,
 			5,
 			'#0D4E41',
@@ -160,31 +170,3 @@ console.log(player)
 
 
 
-
-
-
-
-
-
-//	creation de projectile
-const projectile = new Projectile(
-	canvas.width / 2, 
-	canvas.height / 2, 
-	5, 
-	'#0D4E41', 
-	{
-	x: 1, 
-	y: 1	
-	}
-)
-//	creation de projectile2
-const projectile2 = new Projectile(
-	canvas.width / 2, 
-	canvas.height / 2, 
-	5, 
-	'green', 
-	{
-	x: -1, 
-	y: -1	
-	}
-)
